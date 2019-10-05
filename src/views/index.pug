@@ -5,6 +5,16 @@ html
   body
     h1 load image to translate
     form(action="/translate", method="post", enctype="multipart/form-data")
+      div
+        label from
+          select(name="from")
+            option(value="eng") english
+            option(value="spa") spanish
+      div
+        label to
+          select(name="to")
+            option(value="eng") english
+            option(value="spa", selected) spanish
       input(type="file", name="file")
       input(type="submit", value="translate")
     if text

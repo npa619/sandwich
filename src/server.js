@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from "express";
 import multer from 'multer';
 import path from 'path';
@@ -17,10 +18,14 @@ app.set('view engine', 'pug');
 app.get('/', (req, res) => res.render('index'));
 
 app.post('/translate', upload.single('file'), async (req, res) => {
-  const text = await fileToText({ file: req.file.buffer });
-  const translatedText = await translate(text);
+  const { from, to } = req.body;
+  const text = await fileToText({
+    file: req.file.buffer,
+    lang: from,
+  });
+  const translatedText = await translate({ text, from, to });
+
   res.render('index', { text, translatedText });
 })
 
 app.listen(port, () => console.log(`Listening on port ${port}.`));
-

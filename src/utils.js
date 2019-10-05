@@ -1,9 +1,9 @@
 import request from "axios";
 import { createWorker } from "tesseract.js";
 
-export const fileToText = async ({ file, lang = "eng" }) => {
+export const fileToText = async ({ file, lang }) => {
   const worker = createWorker({
-    logger: ({progress, status}) => console.log(status, progress)
+    logger: ({ progress, status }) => console.log(status, progress)
   });
   await worker.load();
   await worker.loadLanguage(lang);
@@ -13,17 +13,22 @@ export const fileToText = async ({ file, lang = "eng" }) => {
   return text;
 };
 
-export const translate = text => {
+const IDIOMS = {
+  eng: 'en',
+  spa: 'es',
+};
+
+export const translate = async ({ text, from, to}) => {
   const key = process.env.YANDEX_KEY;
-  const baseUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate";
+  const url = "https://translate.yandex.net/api/v1.5/tr.json/translate";
 
   return request({
+    url,
     method: "post",
-    url: baseUrl,
     params: {
       key,
-      lang: "en-es",
-      text
+      lang: `${IDIOMS[from]}-${IDIOMS[to]}`,
+      text,
     }
   }).then(({ data: { text } }) => text);
 };
