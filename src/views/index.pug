@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    title photo translate
+  body
+    h1 load image to translate
+    form(action="/translate", method="post", enctype="multipart/form-data")
+      input(type="file", name="file")
+      input(type="submit", value="translate")
+    if text
+      div
+        h3 original text
+        p #{text}
+    if translatedText
+      div
+        h3 translated text
+        p #{translatedText}
